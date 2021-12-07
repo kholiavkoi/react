@@ -1,4 +1,13 @@
 .description {
 	padding: 10px;
+	display: flex;
 }
 
+.description img {
+	width: 200px;
+	margin-right: 20px;
+}
+
+.description div {
+	color: #fff;
+}
