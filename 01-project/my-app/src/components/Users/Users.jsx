@@ -10,6 +10,7 @@ const Users = (props) => {
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
+
     return (
         <div>
             <div>
@@ -22,6 +23,7 @@ const Users = (props) => {
                 }
             </div>
             {
+
                 props.users.map(u =>
                     <div key={u.id}>
                     <span>
