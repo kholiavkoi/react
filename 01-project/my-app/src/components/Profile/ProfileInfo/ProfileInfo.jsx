@@ -1,11 +1,11 @@
 import React from 'react';
 import s from './ProfileInfo.module.css'
 import Preloader from "../../common/Preloader/Preloader";
-import ProfileStatus from './ProfileStatus'
+import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 
-const ProfileInfo = (props) => {
+const ProfileInfo = ({profile, status, updateStatus}) => {
 
-    if (!props.profile) {
+    if (!profile) {
         return <Preloader/>
     }
     return (
@@ -19,22 +19,22 @@ const ProfileInfo = (props) => {
             <div className={s.description}>
 
                 <div>
-                    <img src={props.profile.photos.large} alt=""/>
+                    <img src={profile.photos.large} alt=""/>
                 </div>
                 <div>
-                    <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
+                    <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
                     <div>
-                        Меня зовут: {props.profile.fullName}
+                        Меня зовут: {profile.fullName}
                     </div>
                     <div>
-                        Обо мне: {props.profile.aboutMe}
+                        Обо мне: {profile.aboutMe}
                     </div>
                     <div>
-                        Работу {props.profile.lookingForAJob ? props.profile.lookingForAJobDescription : 'ищу :('}
+                        Работу {profile.lookingForAJob ? profile.lookingForAJobDescription : 'ищу :('}
                     </div>
                     <div> Мои контакты:
                         {
-                        Object.keys(props.profile.contacts).map((contact,i) => {
+                        Object.keys(profile.contacts).map((contact,i) => {
                             return (
                                 <span key={i}> {contact}, </span>
                             )
