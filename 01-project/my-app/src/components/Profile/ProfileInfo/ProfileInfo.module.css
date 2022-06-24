@@ -11,3 +11,12 @@
 .description div {
 	color: #fff;
 }
+
+.contacts {
+	padding-left: 10px;
+}
+
+.photoBlock {
+	display: flex;
+	flex-direction: column;
+}

@@ -1,47 +1,92 @@
 import React from 'react'
-import {Field, reduxForm} from "redux-form";
-import {createField, Input} from "../common/FormsControls/FormsControls";
-import {required} from "../../utils/validators/validators";
+import { useForm } from "react-hook-form";
+import './Login.css'
 import {connect} from "react-redux";
 import {login} from "../../redux/auth-reducer";
 import {Redirect} from "react-router-dom";
-import styles from '../common/FormsControls/FormsControls.module.css'
 
-const LoginForm = ({handleSubmit, error}) => {
-    return <form onSubmit={handleSubmit}>
-        {createField('email', 'Email', [required], Input)}
-        {createField('password', 'Password', [required], Input, {type: 'password'})}
-        {createField('rememberMe', null, [], Input, {type: 'checkbox'}, 'remember me')}
-        {error && <div className={styles.formSummaryError}>
-            {error}
-        </div>}
-
-        <div>
-            <button>Login</button>
-        </div>
-    </form>
-}
-
-const LoginReduxForm = reduxForm({
-    form: 'login'
-})(LoginForm)
 
 const Login = (props) => {
-    const onSubmit = (formData) => {
-        props.login(formData.email, formData.password, formData.rememberMe)
+    const {
+        register,
+        formState: {
+            errors,
+        },
+        handleSubmit
+    } = useForm({
+        mode: "all"
+    })
+
+
+    const onSubmit = (data) => {
+        console.log(data)
+        props.login(data.email, data.password, data.rememberMe, data.captcha)
     }
 
     if (props.isAuth) {
         return <Redirect to={'/profile'}/>
     }
 
-    return <div>
+
+    return  <div>
         <h1>Login</h1>
-        <LoginReduxForm onSubmit={onSubmit}/>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+                <input type="text"
+                       placeholder='login'
+                       {...register('email', {
+                           required: 'Поле обязательное',
+                           minLength: {
+                               value: 3,
+                               message: 'Минимум 3 символа'
+                           }
+                       })}
+                />
+                <div>
+                    {errors.email && <div className='required'>{errors.email?.message || 'Field is required'}</div> }
+                </div>
+                <input type="password"
+                       placeholder='password'
+                       {...register('password', {
+                           required: 'Поле обязательное',
+                           minLength: {
+                               value: 3,
+                               message: 'Минимум 3 символа'
+                           }
+                       })}
+                />
+                <div>
+                    {errors.password && <div className='required'>{errors.password?.message || 'Field is required'}</div> }
+                </div>
+                <label >
+                    <input type="checkbox"
+                           placeholder='rememberMe'
+                           {...register('rememberMe')}
+                    /> remember me
+                </label>
+
+            </div>
+
+
+            <input type="submit" value='login'/>
+
+            {props.captchaUrl && <img className='captcha' src={props.captchaUrl} alt='captcha'/> }
+            {props.captchaUrl && <input type="text"
+                                        placeholder='captcha'
+                                        {...register('captcha', {
+                                            required: 'Поле обязательное',
+                                        })}
+            /> }
+            <div>
+                {errors.captcha && <div className='required'>{errors.captcha?.message || 'Field is required'}</div> }
+            </div>
+        </form>
     </div>
+
 }
 
 const mapStateToProps = (state) => ({
+    captchaUrl: state.auth.captchaUrl,
     isAuth: state.auth.isAuth
 })
 

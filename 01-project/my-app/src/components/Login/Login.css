@@ -1,0 +1,10 @@
+.required {
+    color: red;
+}
+
+.app-wrapper-content img.captcha {
+    width: 150px;
+    display: block;
+    margin: 20px;
+    height: auto;
+}
